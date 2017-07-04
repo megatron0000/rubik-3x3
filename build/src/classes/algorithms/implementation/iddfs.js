@@ -49,10 +49,11 @@ var IDDFS = (function (_super) {
         }
         var found = null;
         if (depth > 0) {
-            this.graph.getChilds(node).forEach(function (path) {
+            this.graph.getChilds(node).some(function (path) {
                 var historyClone = currentHistory.clone();
                 historyClone.append(path.edge);
                 found = _this.dls(path.child, depth - 1, historyClone);
+                return found === null ? false : true;
             });
             if (found !== null) {
                 return found;

@@ -1,5 +1,6 @@
 "use strict";
 require("reflect-metadata");
+var iddfs_with_duplicates_1 = require("./classes/algorithms/implementation/iddfs-with-duplicates");
 var bfs_1 = require("./classes/algorithms/implementation/bfs");
 var iddfs_1 = require("./classes/algorithms/implementation/iddfs");
 var cube_1 = require("./classes/cube/implementation/cube");
@@ -39,3 +40,4 @@ container.bind(f_1.F).toSelf();
 container.bind(b_1.B).toSelf();
 container.bind(iddfs_1.IDDFS).toSelf();
 container.bind(bfs_1.BFS).toSelf();
+container.bind(iddfs_with_duplicates_1.IDDFSWithDuplicates).toSelf();

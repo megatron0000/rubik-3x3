@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { IDDFSWithDuplicates } from './classes/algorithms/implementation/iddfs-with-duplicates';
 import { BFS } from './classes/algorithms/implementation/bfs';
 import { IDDFS } from './classes/algorithms/implementation/iddfs';
 import { ICube } from './classes/cube/i-cube';
@@ -46,7 +47,7 @@ container.bind<F>(F).toSelf();
 container.bind<B>(B).toSelf();
 container.bind<IDDFS>(IDDFS).toSelf();
 container.bind<BFS>(BFS).toSelf();
-
+container.bind<IDDFSWithDuplicates>(IDDFSWithDuplicates).toSelf();
 
 
 

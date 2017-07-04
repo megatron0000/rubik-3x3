@@ -13,9 +13,9 @@ export class IDDFS extends AlgorithmExecutor {
     /**
      * Initialized on exec()
      */
-    private solvedCube: ICube = null;
+    protected solvedCube: ICube = null;
 
-    private iddfs(root: ICube): IHistory {
+    protected iddfs(root: ICube): IHistory {
         let found: IHistory;
         for (let depth = 0; depth < 20; depth++) {
             found = this.historyService.create();
@@ -27,16 +27,17 @@ export class IDDFS extends AlgorithmExecutor {
         return null;
     }
 
-    private dls(node: ICube, depth: number, currentHistory: IHistory): IHistory {
+    protected dls(node: ICube, depth: number, currentHistory: IHistory): IHistory {
         if (depth === 0 && node.equals(this.solvedCube)) {
             return currentHistory;
         }
         let found: IHistory = null;
         if (depth > 0) {
-            this.graph.getChilds(node).forEach(path => {
+            this.graph.getChilds(node).some(path => {
                 let historyClone = currentHistory.clone();
                 historyClone.append(path.edge);
                 found = this.dls(path.child, depth - 1, historyClone);
+                return found === null ? false : true;
             });
             if (found !== null) {
                 return found;
@@ -46,9 +47,9 @@ export class IDDFS extends AlgorithmExecutor {
     }
 
     constructor(
-        @inject('IHistoryService') private historyService: IHistoryService,
-        @inject('ICubeGraph') private graph: ICubeGraph,
-        @inject('ICubeService') private cubeService: ICubeService
+        @inject('IHistoryService') protected historyService: IHistoryService,
+        @inject('ICubeGraph') protected graph: ICubeGraph,
+        @inject('ICubeService') protected cubeService: ICubeService
     ) {
         super();
     }

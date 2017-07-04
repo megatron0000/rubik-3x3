@@ -1,9 +1,10 @@
 import { container } from './inversify.config';
-import { IHistory } from './classes/history/i-history';
-import { ICube } from './classes/cube/i-cube';
 import { BFS } from './classes/algorithms/implementation/bfs';
 import { IDDFS } from './classes/algorithms/implementation/iddfs';
+import { IDDFSWithDuplicates } from './classes/algorithms/implementation/iddfs-with-duplicates';
+import { ICube } from './classes/cube/i-cube';
 import { ICubeService } from './classes/cube/i-cube-service';
+import { IHistory } from './classes/history/i-history';
 import { MoveService } from './classes/moves/move-service';
 import { Color } from './enums/color';
 import fs = require('fs-extra');
@@ -11,6 +12,7 @@ import { resolve } from 'path';
 
 let moves = container.get(MoveService);
 let iddfs = container.get(IDDFS);
+let improvedIddfs = container.get(IDDFSWithDuplicates);
 let bfs = container.get(BFS);
 
 let cube = container.get<ICubeService>('ICubeService').createSolved({
@@ -21,6 +23,18 @@ let cube = container.get<ICubeService>('ICubeService').createSolved({
     front: Color.WHITE,
     back: Color.YELLOW
 });
+
+let extraHardCube = moves.B.exec(
+    moves.L.exec(
+        moves.L.exec(
+            moves.F.exec(
+                moves.B.exec(
+                    cube
+                )
+            )
+        )
+    )
+)
 
 let hardCube = moves.B.exec(
     moves.D.exec(
@@ -70,7 +84,10 @@ console.log(new Date().toLocaleString());
 // console.log(
 //     iddfs.exec(hardCube).toString()
 // );
+// console.log(
+//     bfs.exec(normalCube, stopFunction).toString()
+// );
 console.log(
-    bfs.exec(normalCube, stopFunction).toString()
+    improvedIddfs.exec(extraHardCube).toString()
 );
 console.log(new Date().toLocaleString());
