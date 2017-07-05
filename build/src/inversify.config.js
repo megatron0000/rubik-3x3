@@ -17,8 +17,15 @@ var r_1 = require("./classes/moves/implementation/r");
 var u_1 = require("./classes/moves/implementation/u");
 var move_service_1 = require("./classes/moves/move-service");
 var inversify_1 = require("inversify");
+var strong_paths_1 = require("strong-paths");
 var container = new inversify_1.Container();
 exports.container = container;
+/**
+ * External
+ */
+container.bind('IPathService').to(strong_paths_1.PathService);
+container.bind('IInternalPath').to(strong_paths_1.InternalPath);
+container.bind('IAbsolutePath').to(strong_paths_1.AbsolutePath);
 /**
  * Good Abstractions
  */

@@ -1,49 +1,29 @@
+#!/usr/bin/env node
 "use strict";
 var inversify_config_1 = require("./inversify.config");
 var bfs_1 = require("./classes/algorithms/implementation/bfs");
-var iddfs_1 = require("./classes/algorithms/implementation/iddfs");
-var iddfs_with_duplicates_1 = require("./classes/algorithms/implementation/iddfs-with-duplicates");
 var move_service_1 = require("./classes/moves/move-service");
-var color_1 = require("./enums/color");
-var fs = require("fs-extra");
-var path_1 = require("path");
-var moves = inversify_config_1.container.get(move_service_1.MoveService);
-var iddfs = inversify_config_1.container.get(iddfs_1.IDDFS);
-var improvedIddfs = inversify_config_1.container.get(iddfs_with_duplicates_1.IDDFSWithDuplicates);
+var commandLineCommands = require("command-line-commands");
+var collect_duplicates_1 = require("./routines/collect-duplicates");
+var search_duplicates_1 = require("./routines/search-duplicates");
+var pathService = inversify_config_1.container.get('IPathService');
+var cubeService = inversify_config_1.container.get('ICubeService');
+var moveService = inversify_config_1.container.get(move_service_1.MoveService);
 var bfs = inversify_config_1.container.get(bfs_1.BFS);
-var cube = inversify_config_1.container.get('ICubeService').createSolved({
-    up: color_1.Color.BLUE,
-    down: color_1.Color.GREEN,
-    left: color_1.Color.ORANGE,
-    right: color_1.Color.RED,
-    front: color_1.Color.WHITE,
-    back: color_1.Color.YELLOW
-});
-var extraHardCube = moves.B.exec(moves.L.exec(moves.L.exec(moves.F.exec(moves.B.exec(cube)))));
-var hardCube = moves.B.exec(moves.D.exec(moves.L.exec(cube)));
-var normalCube = moves.B.exec(moves.D.exec(cube));
-var easyCube = moves.D.exec(cube);
-var duplicatesFile = path_1.resolve(__dirname, 'database', 'duplicates');
-fs.createFileSync(duplicatesFile);
-var stopFunction = function (node, solved, history, duplicateOf) {
-    if (duplicateOf) {
-        fs.appendFileSync(duplicatesFile, '--------\t\t\t'
-            + history.toString()
-            + ' ('
-            + duplicateOf.toString()
-            + ')\n');
-    }
-    else {
-        fs.appendFileSync(duplicatesFile, history.toString() + '\n');
-    }
-    return false;
-};
-console.log(new Date().toLocaleString());
-// console.log(
-//     iddfs.exec(hardCube).toString()
-// );
-// console.log(
-//     bfs.exec(normalCube, stopFunction).toString()
-// );
-console.log(improvedIddfs.exec(extraHardCube).toString());
-console.log(new Date().toLocaleString());
+/**
+ * At runtime, we will be at @root/build/src/main.ts
+ */
+pathService.init(__dirname + '/../../');
+var validCommands = [null, 'collect-duplicates', 'search-duplicates'];
+var _a = commandLineCommands(validCommands), command = _a.command, argv = _a.argv;
+switch (command) {
+    case 'collect-duplicates':
+        collect_duplicates_1.collectDuplicates(pathService);
+        break;
+    case 'search-duplicates':
+        search_duplicates_1.searchDuplicates(moveService, bfs, cubeService, pathService);
+        break;
+    default:
+        console.log('Specify a command');
+        break;
+}

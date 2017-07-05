@@ -7,6 +7,9 @@
         "test": "tsc && jasmine",
         "solve": "tsc && node --max-old-space-size=2000 build/src/main.js"
     },
+    "bin": {
+        "rubik": "build/src/main.js"
+    },
     "keywords": [],
     "author": "",
     "license": "ISC",
@@ -22,6 +25,8 @@
         "typescript": "^2.1.5"
     },
     "dependencies": {
-        "fs-extra": "^2.0.0"
+        "command-line-commands": "^2.0.0",
+        "fs-extra": "^2.0.0",
+        "strong-paths": "^1.0.2"
     }
 }

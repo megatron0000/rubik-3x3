@@ -22,8 +22,23 @@ import { R } from './classes/moves/implementation/r';
 import { U } from './classes/moves/implementation/u';
 import { MoveService } from './classes/moves/move-service';
 import { Container } from 'inversify';
+import {
+    IPathService,
+    PathService,
+    IAbsolutePath,
+    AbsolutePath,
+    IInternalPath,
+    InternalPath
+} from 'strong-paths';
 
 let container = new Container();
+
+/**
+ * External
+ */
+container.bind<IPathService>('IPathService').to(PathService);
+container.bind<IInternalPath>('IInternalPath').to(InternalPath);
+container.bind<IAbsolutePath>('IAbsolutePath').to(AbsolutePath);
 
 /**
  * Good Abstractions
